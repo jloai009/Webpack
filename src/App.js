@@ -1,8 +1,21 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+
+const useNotes = (url) => {
+  const [notes, setNotes] = useState([])
+  useEffect(() => {
+    axios.get(url).then(response => {
+      setNotes(response.data)
+    })
+  }, [url])
+  return notes
+}
 
 const App = () => {
   const [counter, setCounter] = useState(0)
   const [values, setValues] = useState([])
+  const url = 'https://obscure-harbor-49797.herokuapp.com/api/notes'
+  const notes = useNotes(url)
 
   const handleClick = () => {
     setCounter(counter + 1)
@@ -15,6 +28,7 @@ const App = () => {
       <button onClick={handleClick}>
         press
       </button>
+      <div>{notes.length} notes on server {url}</div>
     </div>
   )
 
